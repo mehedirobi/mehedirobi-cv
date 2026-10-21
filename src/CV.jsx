@@ -1,3 +1,4 @@
+
 import React from "react";
 
 const profile = {
@@ -6,20 +7,11 @@ const profile = {
   phone: "+8801336458100",
   email: "mehedirobidev@gmail.com",
   location: "Dhaka, Bangladesh",
-  links: [
-    {
-      label: "Portfolio",
-      url: "https://mehedirobi-portfolio.netlify.app/",
-    },
-    {
-      label: "GitHub",
-      url: "https://github.com/mehedirobi",
-    },
-    {
-      label: "LinkedIn",
-      url: "https://www.linkedin.com/in/mehedirobii/",
-    },
-  ],
+  portfolio: "https://mehedirobi-portfolio.netlify.app/",
+  github: "https://github.com/mehedirobi",
+  linkedin: "https://www.linkedin.com/in/mehedirobii/",
+  // Replace this placeholder with your photo later.
+  photo: "",
 };
 
 const skills = [
@@ -29,15 +21,20 @@ const skills = [
   },
   {
     category: "Backend Development",
-    items: "Node.js, Express.js, RESTful API Development",
+    items: "Node.js, Express.js, RESTful API Development, Server-side Logic",
   },
   {
     category: "Database & Authentication",
-    items: "MongoDB, Firebase Authentication, Protected Routes",
+    items: "MongoDB, Firebase Authentication, Protected Routes, User Authentication",
   },
   {
-    category: "Tools & Development",
-    items: "Git, GitHub, CRUD Operations, API Integration, Responsive Design",
+    category: "Development Practices",
+    items:
+      "Reusable Components, CRUD Operations, API Integration, Responsive Design, Form Validation",
+  },
+  {
+    category: "Tools & Platforms",
+    items: "Git, GitHub, Netlify, Vercel, npm, Browser Developer Tools",
   },
 ];
 
@@ -45,40 +42,49 @@ const projects = [
   {
     name: "Khelaro",
     subtitle: "Sports Turf Booking Platform",
+    overview:
+      "A sports turf discovery and booking platform designed to help users find turfs, explore available options, and manage booking-related activities.",
     tech: "React.js, Tailwind CSS, Node.js, Express.js, MongoDB",
     live: "https://khelaro-project.netlify.app/",
     client: "https://github.com/mehedirobi/khelaro-client",
     server: "https://github.com/mehedirobi/khelaro-server",
     points: [
-      "Developed a full-stack platform for discovering sports turfs, selecting booking dates and times, and managing bookings.",
-      "Implemented customer and turf-owner workflows with RESTful API integration and backend data operations.",
-      "Applied responsive UI development and reusable React components to support a consistent user experience across screen sizes.",
+      "Developed responsive interfaces for turf discovery, turf details, and booking-related user workflows.",
+      "Structured customer and turf-owner workflows with role-oriented dashboard planning and navigation.",
+      "Integrated frontend workflows with RESTful API and backend data operations.",
+      "Used reusable React components and responsive styling to maintain UI consistency across screen sizes.",
     ],
   },
   {
     name: "UrbanFix",
     subtitle: "Civic Infrastructure Issue Reporting Platform",
+    overview:
+      "A civic issue reporting platform that enables citizens to report public infrastructure problems and follow their progress.",
     tech: "React.js, Tailwind CSS, Node.js, Express.js, Firebase, MongoDB",
     live: "https://urbanfix-project-01.netlify.app/",
     client: "https://github.com/mehedirobi/urban-fix",
     server: "https://github.com/mehedirobi/urban-fix-server",
     points: [
-      "Built a platform for reporting, tracking, and managing civic infrastructure issues such as damaged roads and streetlights.",
-      "Integrated Firebase Authentication, protected routes, RESTful APIs, and MongoDB data operations.",
-      "Structured issue-management workflows to support status tracking and role-based application experiences.",
+      "Developed reporting workflows for issues such as potholes, damaged streetlights, and public infrastructure problems.",
+      "Integrated Firebase Authentication, protected routes, REST API requests, and MongoDB data operations.",
+      "Designed issue status tracking and role-oriented experiences for citizen, staff, and admin workflows.",
+      "Organized report management interfaces to support issue tracking and community participation.",
     ],
   },
   {
     name: "PawMart",
-    subtitle: "Pet Adoption & Supply Platform",
+    subtitle: "Pet Adoption & Supplies Platform",
+    overview:
+      "A pet-focused marketplace for browsing adoption listings and pet supplies, with listing management and order-related workflows.",
     tech: "React.js, Tailwind CSS, Node.js, Express.js, MongoDB, Firebase",
     live: "https://pawmart-project-01.netlify.app/",
     client: "https://github.com/mehedirobi/pawmart-project",
     server: "https://github.com/mehedirobi/pawmart-project-server",
     points: [
-      "Developed a responsive platform for pet adoption and pet-supply shopping, including category-based browsing and filtering.",
-      "Implemented email/password and Google authentication, listing CRUD operations, adoption workflows, and product ordering.",
-      "Integrated listing and order dashboards, REST API operations, and PDF order-report functionality.",
+      "Built responsive interfaces for pet listings, supply browsing, listing details, and ordering workflows.",
+      "Implemented email/password and Google sign-in integration using Firebase Authentication.",
+      "Developed listing CRUD workflows and dashboard views for managing listings and orders.",
+      "Connected frontend features to REST APIs and implemented order-related reporting functionality.",
     ],
   },
 ];
@@ -90,13 +96,15 @@ const education = {
   status: "In Progress",
 };
 
-function ExternalLink({ href, children }) {
+function ExternalLink({ href, children, className = "" }) {
+  if (!href) return null;
+
   return (
     <a
       href={href}
       target="_blank"
       rel="noopener noreferrer"
-      className="cv-link font-medium text-slate-700 underline decoration-slate-300 underline-offset-2 transition-colors hover:text-blue-700"
+      className={`cv-link ${className}`}
     >
       {children}
     </a>
@@ -105,46 +113,77 @@ function ExternalLink({ href, children }) {
 
 function Section({ title, children, className = "" }) {
   return (
-    <section className={`cv-section mt-5 first:mt-0 ${className}`}>
-      <h2 className="mb-2 border-b border-slate-200 pb-1.5 text-[11px] font-bold uppercase tracking-[0.14em] text-slate-900">
-        {title}
-      </h2>
-
+    <section className={`cv-section ${className}`}>
+      <h2 className="section-heading">{title}</h2>
       {children}
     </section>
   );
 }
 
+function PhotoPlaceholder() {
+  return (
+    <div className="photo-frame" aria-label="Profile photo placeholder">
+      {profile.photo ? (
+        <img
+          src={profile.photo}
+          alt={`${profile.name} profile`}
+          className="profile-photo"
+        />
+      ) : (
+        <>
+          <span className="photo-initials">MR</span>
+          <span className="photo-caption">PROFILE PHOTO</span>
+        </>
+      )}
+    </div>
+  );
+}
+
+function ContactLink({ href, children }) {
+  return (
+    <a
+      href={href}
+      target={href.startsWith("http") ? "_blank" : undefined}
+      rel={href.startsWith("http") ? "noopener noreferrer" : undefined}
+      className="contact-link"
+    >
+      {children}
+    </a>
+  );
+}
+
+function ProjectLinks({ project }) {
+  return (
+    <nav
+      aria-label={`${project.name} project links`}
+      className="project-links"
+    >
+      <ExternalLink href={project.live}>Live Demo</ExternalLink>
+      <ExternalLink href={project.client}>Client Repo</ExternalLink>
+      <ExternalLink href={project.server}>Server Repo</ExternalLink>
+    </nav>
+  );
+}
+
 function Project({ project }) {
   return (
-    <article className="cv-project py-3 first:pt-0 last:pb-0">
-      <div className="flex flex-col justify-between gap-2 sm:flex-row sm:items-start">
-        <div className="min-w-0">
-          <h3 className="text-[13px] font-bold text-slate-950">
-            {project.name}
-          </h3>
-
-          <p className="mt-0.5 text-[10.5px] font-medium text-slate-600">
-            {project.subtitle}
-          </p>
+    <article className="project">
+      <div className="project-top">
+        <div className="project-title-group">
+          <h3 className="project-title">{project.name}</h3>
+          <p className="project-subtitle">{project.subtitle}</p>
         </div>
 
-        <nav
-          aria-label={`${project.name} project links`}
-          className="flex flex-wrap gap-x-3 gap-y-1 text-[9.5px] sm:justify-end"
-        >
-          <ExternalLink href={project.live}>Live Demo</ExternalLink>
-          <ExternalLink href={project.client}>Client</ExternalLink>
-          <ExternalLink href={project.server}>Server</ExternalLink>
-        </nav>
+        <ProjectLinks project={project} />
       </div>
 
-      <p className="mt-2 text-[10px] leading-relaxed text-slate-600">
-        <span className="font-semibold text-slate-800">Tech Stack: </span>
-        {project.tech}
+      <p className="project-overview">{project.overview}</p>
+
+      <p className="project-tech">
+        <strong>Tech Stack:</strong> {project.tech}
       </p>
 
-      <ul className="mt-2 list-disc space-y-1 pl-4 text-[10.5px] leading-[1.55] text-slate-700 marker:text-slate-400">
+      <ul className="project-list">
         {project.points.map((point) => (
           <li key={point}>{point}</li>
         ))}
@@ -153,201 +192,639 @@ function Project({ project }) {
   );
 }
 
-function CompactHeader() {
+function PageHeader({ continued = false }) {
   return (
-    <header className="mb-5 border-b border-slate-200 pb-3">
-      <div className="flex flex-wrap items-baseline justify-between gap-2">
-        <h2 className="text-[18px] font-bold tracking-tight text-slate-950">
-          {profile.name}
-        </h2>
-
-        <p className="text-[10px] font-semibold uppercase tracking-[0.12em] text-slate-500">
-          {profile.role}
-        </p>
+    <header className="continued-header">
+      <div>
+        <h2>{profile.name}</h2>
+        <p>{profile.role}</p>
       </div>
-
-      <p className="mt-1 text-[9.5px] text-slate-500">
-        Continued — Selected Projects, Education & Training
-      </p>
+      <span>
+        {continued ? "PROJECTS & EDUCATION" : "PROFESSIONAL CV"}
+      </span>
     </header>
   );
 }
 
 export default function CV() {
-  const handlePrint = () => window.print();
-
   return (
-    <main className="min-h-screen bg-slate-100 px-3 py-6 font-sans text-slate-800 sm:px-6 sm:py-8 print:bg-white print:p-0">
-      {/* Preview toolbar: excluded from PDF */}
+    <main className="cv-background">
+      <div className="cv-document">
+        {/* PAGE 1 */}
+        <article className="cv-page">
+          <header className="profile-header">
+            <div className="profile-content">
+              <p className="eyebrow">PROFESSIONAL CV</p>
+              <h1>{profile.name}</h1>
+              <p className="profile-role">{profile.role}</p>
 
-      {/* PAGE 1 */}
-      <div className="cv-page mx-auto w-full max-w-[210mm] bg-white px-5 py-7 shadow-lg shadow-slate-200/60 sm:px-10 sm:py-9 print:shadow-none">
-        <header className="border-b-2 border-slate-900 pb-5 text-center">
-          <h1 className="text-[30px] font-bold leading-tight tracking-tight text-slate-950 sm:text-[34px]">
-            {profile.name}
-          </h1>
-
-          <p className="mt-2 text-[12px] font-semibold uppercase tracking-[0.18em] text-slate-600">
-            {profile.role}
-          </p>
-
-          <div className="mt-3 flex flex-wrap items-center justify-center gap-x-2 gap-y-1.5 text-[10px] text-slate-600">
-            <a
-              href={`mailto:${profile.email}`}
-              className="break-all hover:underline"
-            >
-              {profile.email}
-            </a>
-
-            <span aria-hidden="true">•</span>
-
-            <a href={`tel:${profile.phone}`}>{profile.phone}</a>
-
-            <span aria-hidden="true">•</span>
-
-            <span>{profile.location}</span>
-          </div>
-
-          <nav
-            aria-label="Professional profiles"
-            className="mt-2.5 flex flex-wrap items-center justify-center gap-x-4 gap-y-1 text-[10px]"
-          >
-            {profile.links.map((link) => (
-              <ExternalLink key={link.label} href={link.url}>
-                {link.label}
-              </ExternalLink>
-            ))}
-          </nav>
-        </header>
-
-        <Section title="Professional Summary">
-          <p className="text-[10.5px] leading-[1.7] text-slate-700">
-            MERN Stack Developer and Diploma student in Computer Science &
-            Technology with hands-on project experience building responsive
-            full-stack web applications using React.js, Node.js, Express.js,
-            and MongoDB. Familiar with RESTful API integration, authentication,
-            CRUD operations, and database-driven application workflows.
-            Focused on reusable components, maintainable code, responsive
-            interfaces, and practical problem-solving. Seeking an entry-level
-            developer opportunity to contribute to real-world software
-            projects and continue developing as a software engineer.
-          </p>
-        </Section>
-
-        <Section title="Technical Skills">
-          <div className="space-y-2">
-            {skills.map(({ category, items }) => (
-              <div
-                key={category}
-                className="grid grid-cols-1 gap-1 sm:grid-cols-[145px_1fr] sm:gap-3"
-              >
-                <h3 className="text-[10px] font-semibold text-slate-900">
-                  {category}
-                </h3>
-
-                <p className="text-[10px] leading-[1.6] text-slate-700">
-                  {items}
-                </p>
+              <div className="contact-details">
+                <ContactLink href={`tel:${profile.phone}`}>
+                  {profile.phone}
+                </ContactLink>
+                <ContactLink href={`mailto:${profile.email}`}>
+                  {profile.email}
+                </ContactLink>
+                <span>{profile.location}</span>
               </div>
-            ))}
-          </div>
-        </Section>
 
-        <Section title="Selected Projects">
-          <div className="divide-y divide-slate-200">
+              <nav className="social-links" aria-label="Professional links">
+                <ExternalLink href={profile.portfolio}>Portfolio</ExternalLink>
+                <ExternalLink href={profile.github}>GitHub</ExternalLink>
+                <ExternalLink href={profile.linkedin}>LinkedIn</ExternalLink>
+              </nav>
+            </div>
+
+            <PhotoPlaceholder />
+          </header>
+
+          <Section title="Career Objective">
+            <p>
+              Seeking an entry-level developer position where I can apply my
+              React.js and MERN stack skills to build reliable web applications,
+              contribute to real-world software projects, and grow as a
+              software engineer through practical experience and collaboration.
+            </p>
+          </Section>
+
+          <Section title="Professional Summary">
+            <p>
+              MERN Stack Developer and Diploma student in Computer Science
+              &amp; Technology with hands-on project experience building
+              responsive web applications using React.js, Node.js, Express.js,
+              and MongoDB. Familiar with RESTful APIs, Firebase Authentication,
+              protected routes, CRUD operations, and database integration.
+              Focused on reusable components, maintainable code, responsive UI,
+              and practical problem-solving. Seeking an opportunity to
+              contribute to a development team and strengthen full-stack
+              engineering skills.
+            </p>
+          </Section>
+
+          <Section title="Technical Skills">
+            <div className="skills-list">
+              {skills.map((skill) => (
+                <div className="skill-row" key={skill.category}>
+                  <h3>{skill.category}</h3>
+                  <p>{skill.items}</p>
+                </div>
+              ))}
+            </div>
+          </Section>
+
+          <Section title="Core Competencies">
+            <div className="competencies">
+              <span>Responsive UI Development</span>
+              <span>REST API Integration</span>
+              <span>Authentication &amp; Authorization</span>
+              <span>CRUD Workflows</span>
+              <span>Component Reusability</span>
+              <span>Debugging &amp; Problem-Solving</span>
+              <span>Git-Based Version Control</span>
+              <span>Cross-Device Compatibility</span>
+            </div>
+          </Section>
+
+          <Section title="Selected Projects">
             <Project project={projects[0]} />
             <Project project={projects[1]} />
-          </div>
-        </Section>
+          </Section>
 
-        <footer className="mt-5 border-t border-slate-200 pt-2 text-center text-[8.5px] text-slate-400">
-          {profile.name} · {profile.role}
-        </footer>
-      </div>
+          <footer className="page-footer">
+            <span>{profile.name}</span>
+            <span>Page 1 of 2</span>
+          </footer>
+        </article>
 
-      {/* PAGE 2 */}
-      <div className="cv-page cv-page-two mx-auto mt-6 w-full max-w-[210mm] bg-white px-5 py-7 shadow-lg shadow-slate-200/60 sm:px-10 sm:py-9 print:mt-0 print:shadow-none">
-        <CompactHeader />
+        {/* PAGE 2 */}
+        <article className="cv-page cv-page-two">
+          <PageHeader continued />
 
-        <Section title="Selected Projects — Continued">
-          <Project project={projects[2]} />
-        </Section>
+          <Section title="Selected Projects — Continued">
+            <Project project={projects[2]} />
+          </Section>
 
-        <Section title="Education">
-          <div className="flex flex-col justify-between gap-2 sm:flex-row sm:items-start">
-            <div className="min-w-0">
-              <h3 className="text-[11px] font-bold leading-relaxed text-slate-900">
-                {education.degree}
-              </h3>
+          <Section title="Education">
+            <div className="education-entry">
+              <div>
+                <h3>{education.degree}</h3>
+                <p className="institution">{education.institute}</p>
+                <p className="education-status">{education.status}</p>
+              </div>
+              <span className="status-tag">ONGOING</span>
+            </div>
+          </Section>
 
-              <p className="mt-1 text-[10.5px] leading-[1.65] text-slate-600">
-                {education.institute}
+          <Section title="Professional Training">
+            <div className="training-entry">
+              <h3>Complete Web Development Course</h3>
+              <p>Programming Hero</p>
+              <p className="muted-note">
+                Web development training covering frontend and backend
+                fundamentals through practical projects.
               </p>
             </div>
+          </Section>
 
-            <span className="w-fit shrink-0 rounded-full bg-slate-100 px-2.5 py-1 text-[9px] font-semibold uppercase tracking-wide text-slate-600">
-              {education.status}
-            </span>
-          </div>
-        </Section>
+          <Section title="Languages">
+            <div className="language-grid">
+              <div>
+                <h3>Bangla</h3>
+                <p>Native</p>
+              </div>
+              <div>
+                <h3>English</h3>
+                <p>Intermediate</p>
+              </div>
+            </div>
+          </Section>
 
-        <Section title="Training">
-          <div>
-            <h3 className="text-[11px] font-semibold text-slate-900">
-              Complete Web Development Course
-            </h3>
-
-            <p className="mt-1 text-[10.5px] text-slate-600">
-              Programming Hero
+          <Section title="Development Focus">
+            <p>
+              Building accessible and responsive interfaces, integrating
+              frontend applications with RESTful APIs, implementing
+              authentication and protected routes, managing CRUD operations,
+              and writing reusable React components. Interested in junior
+              frontend, MERN stack, and entry-level software development roles.
             </p>
-          </div>
-        </Section>
+          </Section>
 
-        <Section title="Languages">
-          <div className="grid grid-cols-1 gap-2 sm:grid-cols-2">
-            <div>
-              <h3 className="text-[10.5px] font-semibold text-slate-900">
-                Bangla
-              </h3>
-              <p className="mt-0.5 text-[10px] text-slate-600">Native</p>
-            </div>
+          <Section title="Additional Information">
+            <ul className="additional-list">
+              <li>
+                <strong>Primary stack:</strong> React.js, Node.js, Express.js,
+                and MongoDB.
+              </li>
+              <li>
+                <strong>Development approach:</strong> Component-based
+                architecture, maintainability, usability, and responsive design.
+              </li>
+              <li>
+                <strong>Portfolio:</strong>{" "}
+                <ExternalLink href={profile.portfolio}>
+                  View selected projects
+                </ExternalLink>
+              </li>
+            </ul>
+          </Section>
 
-            <div>
-              <h3 className="text-[10.5px] font-semibold text-slate-900">
-                English
-              </h3>
-              <p className="mt-0.5 text-[10px] text-slate-600">
-                Intermediate
-              </p>
-            </div>
-          </div>
-        </Section>
-
-        <Section title="Development Focus">
-          <p className="text-[10.5px] leading-[1.7] text-slate-700">
-            Building responsive user interfaces, integrating frontend
-            applications with RESTful APIs, implementing authentication and
-            protected routes, managing CRUD workflows, and developing
-            maintainable React components. Interested in entry-level
-            frontend, MERN stack, and junior software development roles.
-          </p>
-        </Section>
-
-        <footer className="mt-8 border-t border-slate-200 pt-3 text-center text-[8.5px] text-slate-400">
-          {profile.email} · {profile.location}
-        </footer>
+          <footer className="page-footer">
+            <span>{profile.email}</span>
+            <span>Page 2 of 2</span>
+          </footer>
+        </article>
       </div>
 
       <style>{`
-        @page {
-          size: A4;
-          margin: 12mm 15mm;
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
+
+        .cv-background {
+          min-height: 100vh;
+          padding: 28px 16px;
+          background: #edf1f5;
+          color: #334155;
+          font-family: Inter, Arial, sans-serif;
+          font-size: 10.5px;
+          line-height: 1.55;
+          -webkit-font-smoothing: antialiased;
         }
 
-        @media screen {
-          .cv-page {
-            min-height: 273mm;
+        .cv-document {
+          width: 100%;
+          max-width: 210mm;
+          margin: 0 auto;
+        }
+
+        .cv-page {
+          position: relative;
+          display: flex;
+          flex-direction: column;
+          min-height: 273mm;
+          margin-bottom: 24px;
+          padding: 13mm 14mm 12mm;
+          background: #fff;
+          box-shadow: 0 8px 30px rgb(15 23 42 / 8%);
+        }
+
+        .profile-header {
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+          gap: 20px;
+          padding-bottom: 16px;
+          border-bottom: 2px solid #172b4d;
+        }
+
+        .profile-content {
+          min-width: 0;
+          flex: 1;
+        }
+
+        .eyebrow {
+          margin: 0 0 5px;
+          color: #476b9a;
+          font-size: 8px;
+          font-weight: 700;
+          letter-spacing: 2px;
+        }
+
+        .profile-header h1 {
+          margin: 0;
+          color: #14243b;
+          font-size: 30px;
+          font-weight: 800;
+          line-height: 1.2;
+          letter-spacing: -0.9px;
+        }
+
+        .profile-role {
+          margin: 5px 0 10px;
+          color: #42638b;
+          font-size: 12px;
+          font-weight: 700;
+          letter-spacing: 0.6px;
+        }
+
+        .contact-details {
+          display: flex;
+          flex-wrap: wrap;
+          gap: 4px 12px;
+          color: #475569;
+          font-size: 9px;
+          overflow-wrap: anywhere;
+        }
+
+        .contact-link {
+          color: inherit;
+          text-decoration: none;
+        }
+
+        .contact-link:hover {
+          color: #1d4ed8;
+        }
+
+        .social-links {
+          display: flex;
+          flex-wrap: wrap;
+          gap: 12px;
+          margin-top: 10px;
+        }
+
+        .cv-link {
+          color: #315c91;
+          font-size: 9px;
+          font-weight: 600;
+          text-decoration: underline;
+          text-decoration-color: #b7c7da;
+          text-underline-offset: 3px;
+          overflow-wrap: anywhere;
+        }
+
+        .photo-frame {
+          display: flex;
+          flex: 0 0 90px;
+          width: 90px;
+          height: 108px;
+          flex-direction: column;
+          align-items: center;
+          justify-content: center;
+          gap: 7px;
+          overflow: hidden;
+          border: 1px dashed #9aaac0;
+          background: #f8fafc;
+          color: #718096;
+        }
+
+        .photo-initials {
+          color: #536b8b;
+          font-size: 25px;
+          font-weight: 700;
+        }
+
+        .photo-caption {
+          font-size: 7px;
+          font-weight: 700;
+          letter-spacing: 0.7px;
+        }
+
+        .profile-photo {
+          width: 100%;
+          height: 100%;
+          object-fit: cover;
+        }
+
+        .cv-section {
+          margin-top: 13px;
+        }
+
+        .section-heading {
+          margin: 0 0 7px;
+          padding-bottom: 4px;
+          border-bottom: 1px solid #d9e1eb;
+          color: #172b4d;
+          font-size: 10px;
+          font-weight: 800;
+          letter-spacing: 1.15px;
+          text-transform: uppercase;
+        }
+
+        .cv-section > p {
+          margin: 0;
+          color: #475569;
+          font-size: 9.5px;
+          line-height: 1.7;
+          overflow-wrap: anywhere;
+        }
+
+        .skills-list {
+          display: flex;
+          flex-direction: column;
+          gap: 6px;
+        }
+
+        .skill-row {
+          display: grid;
+          grid-template-columns: 132px minmax(0, 1fr);
+          gap: 12px;
+        }
+
+        .skill-row h3,
+        .skill-row p {
+          margin: 0;
+          font-size: 9px;
+          line-height: 1.65;
+        }
+
+        .skill-row h3 {
+          color: #263b58;
+          font-weight: 700;
+        }
+
+        .skill-row p {
+          color: #475569;
+        }
+
+        .competencies {
+          display: flex;
+          flex-wrap: wrap;
+          gap: 5px;
+        }
+
+        .competencies span {
+          padding: 3px 7px;
+          border: 1px solid #dce4ed;
+          border-radius: 3px;
+          background: #f8fafc;
+          color: #334155;
+          font-size: 8px;
+          font-weight: 500;
+        }
+
+        .project {
+          padding: 9px 0;
+          border-bottom: 1px solid #e8edf3;
+          break-inside: avoid;
+          page-break-inside: avoid;
+        }
+
+        .project:first-child {
+          padding-top: 0;
+        }
+
+        .project:last-child {
+          padding-bottom: 0;
+          border-bottom: 0;
+        }
+
+        .project-top {
+          display: flex;
+          align-items: flex-start;
+          justify-content: space-between;
+          gap: 8px 12px;
+        }
+
+        .project-title-group {
+          min-width: 0;
+        }
+
+        .project-title {
+          margin: 0;
+          color: #172b4d;
+          font-size: 11px;
+          font-weight: 800;
+        }
+
+        .project-subtitle {
+          margin: 2px 0 0;
+          color: #64748b;
+          font-size: 8.5px;
+          font-weight: 600;
+        }
+
+        .project-links {
+          display: flex;
+          flex-wrap: wrap;
+          justify-content: flex-end;
+          gap: 4px 9px;
+        }
+
+        .project-links .cv-link {
+          font-size: 8px;
+          white-space: nowrap;
+        }
+
+        .project-overview {
+          margin: 6px 0 0;
+          color: #475569;
+          font-size: 9px;
+          line-height: 1.6;
+        }
+
+        .project-tech {
+          margin: 5px 0 0;
+          color: #475569;
+          font-size: 8.5px;
+          line-height: 1.6;
+        }
+
+        .project-tech strong {
+          color: #263b58;
+        }
+
+        .project-list {
+          display: flex;
+          flex-direction: column;
+          gap: 3px;
+          margin: 5px 0 0;
+          padding-left: 14px;
+          color: #475569;
+          font-size: 8.8px;
+          line-height: 1.55;
+        }
+
+        .education-entry {
+          display: flex;
+          justify-content: space-between;
+          align-items: flex-start;
+          gap: 12px;
+        }
+
+        .education-entry h3,
+        .training-entry h3 {
+          margin: 0;
+          color: #263b58;
+          font-size: 10px;
+          font-weight: 700;
+        }
+
+        .institution {
+          margin: 4px 0 0;
+          color: #475569;
+          font-size: 9px;
+        }
+
+        .education-status,
+        .training-entry > p {
+          margin: 4px 0 0;
+          color: #64748b;
+          font-size: 9px;
+        }
+
+        .status-tag {
+          flex-shrink: 0;
+          padding: 3px 7px;
+          border-radius: 3px;
+          background: #eef4fa;
+          color: #315c91;
+          font-size: 7px;
+          font-weight: 800;
+          letter-spacing: 0.6px;
+        }
+
+        .muted-note {
+          line-height: 1.6;
+        }
+
+        .language-grid {
+          display: grid;
+          grid-template-columns: 1fr 1fr;
+          gap: 12px;
+        }
+
+        .language-grid h3 {
+          margin: 0;
+          color: #263b58;
+          font-size: 9.5px;
+          font-weight: 700;
+        }
+
+        .language-grid p {
+          margin: 3px 0 0;
+          color: #64748b;
+          font-size: 9px;
+        }
+
+        .additional-list {
+          display: flex;
+          flex-direction: column;
+          gap: 6px;
+          margin: 0;
+          padding-left: 15px;
+          color: #475569;
+          font-size: 9px;
+          line-height: 1.6;
+        }
+
+        .continued-header {
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+          gap: 12px;
+          padding-bottom: 12px;
+          border-bottom: 2px solid #172b4d;
+        }
+
+        .continued-header h2 {
+          margin: 0;
+          color: #172b4d;
+          font-size: 18px;
+          font-weight: 800;
+        }
+
+        .continued-header p {
+          margin: 3px 0 0;
+          color: #42638b;
+          font-size: 9px;
+          font-weight: 700;
+          letter-spacing: 0.7px;
+        }
+
+        .continued-header > span {
+          color: #64748b;
+          font-size: 7px;
+          font-weight: 700;
+          letter-spacing: 1px;
+          text-align: right;
+        }
+
+        .page-footer {
+          display: flex;
+          justify-content: space-between;
+          gap: 10px;
+          margin-top: auto;
+          padding-top: 10px;
+          border-top: 1px solid #e2e8f0;
+          color: #94a3b8;
+          font-size: 7.5px;
+        }
+
+        @media (max-width: 600px) {
+          .cv-background {
+            padding: 12px 8px;
           }
+
+          .cv-page {
+            min-height: 0;
+            margin-bottom: 14px;
+            padding: 24px 18px;
+          }
+
+          .profile-header {
+            align-items: flex-start;
+            gap: 10px;
+          }
+
+          .profile-header h1 {
+            font-size: 25px;
+          }
+
+          .photo-frame {
+            flex-basis: 70px;
+            width: 70px;
+            height: 86px;
+          }
+
+          .skill-row {
+            grid-template-columns: 1fr;
+            gap: 1px;
+          }
+
+          .project-top {
+            flex-direction: column;
+          }
+
+          .project-links {
+            justify-content: flex-start;
+          }
+
+          .continued-header h2 {
+            font-size: 16px;
+          }
+        }
+
+        @page {
+          size: A4;
+          margin: 0;
         }
 
         @media print {
@@ -355,56 +832,58 @@ export default function CV() {
           body,
           #root {
             width: 100% !important;
-            min-height: 0 !important;
             margin: 0 !important;
             padding: 0 !important;
             background: #fff !important;
           }
 
-          body {
-            -webkit-print-color-adjust: exact;
+          .cv-background {
+            min-height: 0;
+            margin: 0;
+            padding: 0;
+            background: #fff !important;
+            font-size: 9.5px;
             print-color-adjust: exact;
+            -webkit-print-color-adjust: exact;
+          }
+
+          .cv-document {
+            width: 100%;
+            max-width: none;
+            margin: 0;
           }
 
           .cv-page {
-            width: 100% !important;
-            max-width: none !important;
-            min-height: 0 !important;
-            margin: 0 !important;
-            padding: 0 !important;
-            box-shadow: none !important;
-            background: #fff !important;
+            width: 210mm;
+            height: 297mm;
+            min-height: 0;
+            margin: 0;
+            padding: 12mm 14mm 11mm;
+            overflow: hidden;
+            box-shadow: none;
+            background: #fff;
+            break-after: page;
+            page-break-after: always;
           }
 
-          .cv-page-two {
-            break-before: page;
-            page-break-before: always;
+          .cv-page:last-child {
+            break-after: auto;
+            page-break-after: auto;
           }
 
           .cv-section,
-          .cv-project {
+          .project {
             break-inside: avoid;
             page-break-inside: avoid;
           }
 
-          h1,
-          h2,
-          h3 {
-            break-after: avoid;
-            page-break-after: avoid;
+          .cv-link {
+            color: #315c91 !important;
+            text-decoration: none;
           }
 
           a {
-            color: #334155 !important;
-            text-decoration: none !important;
-          }
-
-          .cv-link {
-            font-size: 9px !important;
-          }
-
-          button {
-            display: none !important;
+            overflow-wrap: anywhere;
           }
         }
       `}</style>
